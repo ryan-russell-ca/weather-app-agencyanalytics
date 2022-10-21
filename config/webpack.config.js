@@ -67,7 +67,7 @@ const useTailwind = fs.existsSync(
 const swSrc = paths.swSrc;
 
 // style files regexes
-const cssRegex = /\.css$/;
+const cssRegex = /\.(?:le|c)ss$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
@@ -107,38 +107,38 @@ module.exports = function (webpackEnv) {
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
+      isEnvDevelopment && require.resolve("style-loader"),
       isEnvProduction && {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
-        options: paths.publicUrlOrPath.startsWith('.')
-          ? { publicPath: '../../' }
+        options: paths.publicUrlOrPath.startsWith(".")
+          ? { publicPath: "../../" }
           : {},
       },
       {
-        loader: require.resolve('css-loader'),
+        loader: require.resolve("css-loader"),
         options: cssOptions,
       },
       {
         // Options for PostCSS as we reference these options twice
         // Adds vendor prefixing based on your specified browser support in
         // package.json
-        loader: require.resolve('postcss-loader'),
+        loader: require.resolve("postcss-loader"),
         options: {
           postcssOptions: {
             // Necessary for external CSS imports to work
             // https://github.com/facebook/create-react-app/issues/2677
-            ident: 'postcss',
+            ident: "postcss",
             config: false,
             plugins: !useTailwind
               ? [
-                  'postcss-flexbugs-fixes',
+                  "postcss-flexbugs-fixes",
                   [
-                    'postcss-preset-env',
+                    "postcss-preset-env",
                     {
                       autoprefixer: {
-                        flexbox: 'no-2009',
+                        flexbox: "no-2009",
                       },
                       stage: 3,
                     },
@@ -146,16 +146,16 @@ module.exports = function (webpackEnv) {
                   // Adds PostCSS Normalize as the reset css with default options,
                   // so that it honors browserslist config in package.json
                   // which in turn let's users customize the target behavior as per their needs.
-                  'postcss-normalize',
+                  "postcss-normalize",
                 ]
               : [
-                  'tailwindcss',
-                  'postcss-flexbugs-fixes',
+                  "tailwindcss",
+                  "postcss-flexbugs-fixes",
                   [
-                    'postcss-preset-env',
+                    "postcss-preset-env",
                     {
                       autoprefixer: {
-                        flexbox: 'no-2009',
+                        flexbox: "no-2009",
                       },
                       stage: 3,
                     },
@@ -164,6 +164,9 @@ module.exports = function (webpackEnv) {
           },
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
         },
+      },
+      {
+        loader: require.resolve("less-loader"),
       },
     ].filter(Boolean);
     if (preProcessor) {
