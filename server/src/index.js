@@ -1,11 +1,19 @@
 const express = require("express");
+const cors = require("cors");
 const http = require("http");
 
 const app = express();
 const port = 8080;
 const baseUrl = "http://api.weatherapi.com/v1/current.json";
 
-app.get("/api/current", (req, response) => {
+const corsOptions = {
+  origin: process.env.HOST_ORIGIN,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors());
+
+app.get("/api/current", cors(corsOptions), (req, response) => {
   const { q } = req.query;
 
   http
