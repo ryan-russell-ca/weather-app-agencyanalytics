@@ -1,38 +1,83 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.container {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-.App-link {
-  color: #61dafb;
-}
+  .container-grid {
+    width: 100%;
+    max-width: 1280px;
+    border-radius: 10px;
+    border: 8px solid #ffffff;
+    width: 100%;
+    font-size: 35px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 8px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.3);
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+    .weather-today {
+      grid-column: span 4;
+      display: flex;
+      flex-direction: column;
+      background-color: #eef6fb;
+      padding: 55px 0;
+      align-items: center;
+
+      .weather-today-title {
+        font-weight: 300;
+        text-align: center;
+        margin: 0;
+        margin-bottom: 25px;
+      }
+
+      .weather-container {
+        display: flex;
+        height: 180px;
+        align-items: center;
+        margin: auto;
+
+        .weather-icon {
+          width: auto;
+          height: 180px;
+        }
+      }
+
+      .weather-today-degree {
+        font-size: 80px;
+      }
+    }
+
+    .weather-weekday {
+      display: flex;
+      flex-direction: column;
+      background-color: #eef6fb;
+      padding: 55px 0;
+      align-items: center;
+      font-size: 30px;
+
+      .weather-icon {
+        width: 110px;
+        height: 110px;
+      }
+
+      .weather-weekday-title {
+        font-weight: 300;
+        text-align: center;
+        margin: 0;
+        margin-bottom: 25px;
+      }
+
+      .weather-weekday-degree {
+        font-size: 40px;
+      }
+
+      @media screen and (max-width: 900px) {
+        grid-column: span 4;
+      }
+    }
   }
 }
