@@ -1,0 +1,28 @@
+.weather-weekday {
+  display: flex;
+  flex-direction: column;
+  background-color: #eef6fb;
+  padding: 55px 0;
+  align-items: center;
+  font-size: 30px;
+
+  .weather-icon {
+    width: 110px;
+    height: 110px;
+  }
+
+  .weather-weekday-title {
+    font-weight: 300;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 25px;
+  }
+
+  .weather-weekday-degree {
+    font-size: 40px;
+  }
+
+  @media screen and (max-width: 900px) {
+    grid-column: span 4;
+  }
+}
