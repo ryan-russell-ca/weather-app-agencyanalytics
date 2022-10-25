@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const http = require("http");
+const https = require("https");
 
 const app = express();
 const port = 8080;
-const baseUrl = "http://api.weatherapi.com/v1/current.json";
+const baseUrl = "https://api.openweathermap.org/data/3.0";
 
 const corsOptions = {
   origin: process.env.HOST_ORIGIN,
@@ -13,26 +13,44 @@ const corsOptions = {
 
 app.use(cors());
 
-app.get("/api/current", cors(corsOptions), (req, response) => {
-  const { q } = req.query;
+const forecastCache = {
+  time: 0,
+  payload: {},
+};
 
-  http
-    .get(`${baseUrl}?key=${process.env.WEATHER_SECRET}&q=${q}`, (res) => {
-      let data = [];
-      const headerDate =
-        res.headers && res.headers.date ? res.headers.date : "no response date";
+app.get("/api/forecast", cors(corsOptions), (req, response) => {
+  const { lat, lon } = req.query;
 
-      res.on("data", (chunk) => {
-        data.push(chunk);
-      });
+  if (forecastCache.time > new Date().getTime() - 600000) {
+    response.status(200).send(forecastCache.payload);
+    return;
+  }
 
-      res.on("end", () => {
-        const user = JSON.parse(Buffer.concat(data).toString());
-        response.status(res.statusCode).send(user);
-      });
-    })
+  https
+    .get(
+      `${baseUrl}/onecall?appid=${process.env.WEATHER_SECRET}&exclude=minutely,hourly,alerts&units=metric&lat=${lat}&lon=${lon}`,
+      (res) => {
+        let data = [];
+        const headerDate =
+          res.headers && res.headers.date
+            ? res.headers.date
+            : "no response date";
+
+        res.on("data", (chunk) => {
+          data.push(chunk);
+        });
+
+        res.on("end", () => {
+          const payload = JSON.parse(Buffer.concat(data).toString());
+          forecastCache.time = new Date().getTime();
+          forecastCache.payload = payload;
+          console.log("Updated forecast!");
+          response.status(res.statusCode).send(payload);
+        });
+      }
+    )
     .on("error", (err) => {
-      console.log("Error: ", err.message);
+      console.error("Error: ", err.message);
     });
 });
 
