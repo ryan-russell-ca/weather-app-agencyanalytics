@@ -13,16 +13,16 @@ const corsOptions = {
 
 app.use(cors());
 
-const forecastCache = {
-  time: 0,
-  payload: {},
-};
+const forecastCache = {};
 
 app.get("/api/forecast", cors(corsOptions), (req, response) => {
   const { lat, lon } = req.query;
 
-  if (forecastCache.time > new Date().getTime() - 600000) {
-    response.status(200).send(forecastCache.payload);
+  const cacheKey = lat + "-" + lon;
+  const cache = forecastCache[cacheKey];
+
+  if (cache && cache.time > new Date().getTime() - 600000) {
+    response.status(200).send(cache.payload);
     return;
   }
 
@@ -31,10 +31,6 @@ app.get("/api/forecast", cors(corsOptions), (req, response) => {
       `${baseUrl}/onecall?appid=${process.env.WEATHER_SECRET}&exclude=minutely,hourly,alerts&units=metric&lat=${lat}&lon=${lon}`,
       (res) => {
         let data = [];
-        const headerDate =
-          res.headers && res.headers.date
-            ? res.headers.date
-            : "no response date";
 
         res.on("data", (chunk) => {
           data.push(chunk);
@@ -42,10 +38,14 @@ app.get("/api/forecast", cors(corsOptions), (req, response) => {
 
         res.on("end", () => {
           const payload = JSON.parse(Buffer.concat(data).toString());
-          forecastCache.time = new Date().getTime();
-          forecastCache.payload = payload;
+          forecastCache[cacheKey] = {};
+          forecastCache[cacheKey].time = new Date().getTime();
+          forecastCache[cacheKey].payload = payload;
           console.log("Updated forecast!");
-          response.status(res.statusCode).send(payload);
+
+          setTimeout(() => {
+            response.status(res.statusCode).send(payload);
+          }, 3000);
         });
       }
     )
