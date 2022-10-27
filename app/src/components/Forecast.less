@@ -11,35 +11,29 @@
   background-color: #ffffff;
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.3);
 
-  .weather-today {
+  .container-grid-header {
     grid-column: span 4;
     display: flex;
     flex-direction: column;
     background-color: #eef6fb;
     padding: 55px 0;
     align-items: center;
+    height: 260px;
+  }
 
-    .weather-today-title {
-      font-weight: 300;
-      text-align: center;
-      margin: 0;
-      margin-bottom: 25px;
-    }
+  .container-grid-cell {
+    display: flex;
+    flex-direction: column;
+    background-color: #eef6fb;
+    padding: 55px 0;
+    align-items: center;
+    font-size: 30px;
+    height: 230px;
+    margin: 0;
+    list-style: none;
 
-    .weather-container {
-      display: flex;
-      height: 180px;
-      align-items: center;
-      margin: auto;
-
-      .weather-icon {
-        width: auto;
-        height: 180px;
-      }
-    }
-
-    .weather-today-degree {
-      font-size: 80px;
+    @media screen and (max-width: 900px) {
+      grid-column: span 4;
     }
   }
 }
