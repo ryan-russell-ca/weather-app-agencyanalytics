@@ -6,8 +6,8 @@ ENV NODE_ENV production
 ENV HOST_ORIGIN ${HOST_ORIGIN}
 ENV WEATHER_SECRET ${WEATHER_SECRET}
 ENV ROBOT_NOINDEX true
-COPY --from=weather-server-build:latest /app .
-COPY --from=weather-app-build:latest /app/build ./build
+COPY --from=weather-server-builder:latest /app .
+COPY --from=weather-app-builder:latest /app/build ./build
 
 EXPOSE 8080
 CMD ["yarn", "start"]

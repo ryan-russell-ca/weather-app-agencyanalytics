@@ -2,5 +2,5 @@ FROM node:16-alpine
 WORKDIR /app
 ENV NODE_ENV production
 COPY ./app .
-COPY --from=weather-app-server-dependencies:latest /app/node_modules ./node_modules
+COPY --from=weather-app-dependencies:latest /app/node_modules ./node_modules
 RUN yarn build
