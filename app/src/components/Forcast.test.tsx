@@ -1,84 +1,13 @@
 import { render, screen, within } from "@testing-library/react";
-import { ForecastPayload } from "../api/Fetch";
 import cityCoordinates from "../cities";
+import { forecast } from "../test/payloads";
 import Forecast from "./Forecast";
 
-const forecast: ForecastPayload = {
-  current: {
-    dt: 1666827580,
-    temp: 8.78,
-    weather: [
-      {
-        id: 804,
-        main: "Clouds",
-        description: "overcast clouds",
-        icon: "04n",
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1666850400,
-      temp: {
-        max: 9.86,
-      },
-      weather: [
-        {
-          id: 500,
-          main: "Rain",
-          description: "light rain",
-          icon: "10d",
-        },
-      ],
-    },
-    {
-      dt: 1666936800,
-      temp: {
-        max: 6.86,
-      },
-      weather: [
-        {
-          id: 800,
-          main: "Clear",
-          description: "clear sky",
-          icon: "01d",
-        },
-      ],
-    },
-    {
-      dt: 1667023200,
-      temp: {
-        max: 13.87,
-      },
-      weather: [
-        {
-          id: 804,
-          main: "Clouds",
-          description: "overcast clouds",
-          icon: "04d",
-        },
-      ],
-    },
-    {
-      dt: 1667109600,
-      temp: {
-        max: 11.57,
-      },
-      weather: [
-        {
-          id: 500,
-          main: "Rain",
-          description: "light rain",
-          icon: "10d",
-        },
-      ],
-    },
-  ],
-};
 const activeCity: [key: string, coords: number[]] = [
   "Ottawa",
   [45.4215, 75.6972],
 ];
+
 const cities = Object.entries(cityCoordinates);
 
 describe("Renders components", () => {
