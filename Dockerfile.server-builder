@@ -1,0 +1,5 @@
+FROM node:16-alpine
+WORKDIR /app
+ENV NODE_ENV production
+COPY ./server .
+COPY --from=weather-app-server-dependencies:latest /app/node_modules ./node_modules
