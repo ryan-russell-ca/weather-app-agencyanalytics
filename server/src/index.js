@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const https = require("https");
+const path = require("path");
+const compression = require("compression");
 
 const app = express();
 const port = 8080;
@@ -13,7 +15,11 @@ const corsOptions = {
 
 app.use(cors());
 
+app.use(compression());
+
 const forecastCache = {};
+
+app.use("/", express.static(path.join(__dirname, "../build")));
 
 app.get("/api/forecast", cors(corsOptions), (req, response) => {
   const { lat, lon } = req.query;
@@ -23,6 +29,7 @@ app.get("/api/forecast", cors(corsOptions), (req, response) => {
 
   if (cache && cache.time > new Date().getTime() - 600000) {
     response.status(200).send(cache.payload);
+
     return;
   }
 
@@ -43,9 +50,7 @@ app.get("/api/forecast", cors(corsOptions), (req, response) => {
           forecastCache[cacheKey].payload = payload;
           console.log("Updated forecast!");
 
-          setTimeout(() => {
-            response.status(res.statusCode).send(payload);
-          }, 3000);
+          response.status(res.statusCode).send(payload);
         });
       }
     )
